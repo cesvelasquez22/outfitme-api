@@ -7,7 +7,6 @@ async function bootstrap() {
   const logger = new Logger('NestApplication');
   app.setGlobalPrefix('api');
   await app.listen(3000);
-  // logger.log(`App running on port ${process.env.PORT}`);
-  logger.log(`App running on port 3000`);
+  logger.log(`App running on port ${process.env.PORT}`);
 }
 bootstrap();
