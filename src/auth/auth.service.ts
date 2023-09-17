@@ -1,37 +1,39 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { FirebaseService } from '../firebase/firebase.service';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
+import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
+import { JwtPayload } from './auth.types';
+
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly firebaseService: FirebaseService,
     @InjectRepository(User) private readonly userRepository: Repository<User>,
+    private readonly jwtService: JwtService,
   ) {}
   async register(createUserDto: CreateUserDto) {
     try {
-      const { email, password, fullName } = createUserDto;
-      // TODO: COnsider use transaction or cloud function to prevent inconsistency
-      const userRecord = await this.firebaseService.auth.createUser({
-        email,
-        password,
-        displayName: fullName,
+      const { password, ...user } = createUserDto;
+      const userRecord = this.userRepository.create({
+        ...user,
+        password: bcrypt.hashSync(password, 10),
       });
-      await this.userRepository.save({
-        uid: userRecord.uid,
-        email: userRecord.email,
-        fullName: userRecord.displayName,
-      });
+      await this.userRepository.save(userRecord);
       return {
-        id: userRecord.uid,
+        id: userRecord.id,
         email: userRecord.email,
-        fullName: userRecord.displayName,
+        fullName: userRecord.fullName,
+        token: this.getJwt({ id: userRecord.id }),
       };
     } catch (error) {
       throw new BadRequestException(error.message);
     }
+  }
+
+  private getJwt(payload: JwtPayload) {
+    return this.jwtService.sign(payload);
   }
 }

@@ -5,14 +5,14 @@ export class User {
   @PrimaryGeneratedColumn()
   id: string;
 
-  @Column('text')
-  uid: string;
-
   @Column('varchar', { unique: true, length: 50 })
   email: string;
 
   @Column('text')
   fullName: string;
+
+  @Column('text', { select: false })
+  password: string;
 
   @Column('text', { nullable: true })
   avatar: string;
@@ -22,4 +22,7 @@ export class User {
 
   @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)', onUpdate: 'CURRENT_TIMESTAMP(6)' })
   updatedAt: Date;
+
+  @Column('bool', { default: true })
+  active: boolean;
 }
