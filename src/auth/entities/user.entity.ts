@@ -3,7 +3,7 @@ import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateCol
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn()
-  id: string;
+  id: number;
 
   @Column('varchar', { unique: true, length: 50 })
   email: string;
@@ -15,14 +15,14 @@ export class User {
   password: string;
 
   @Column('text', { nullable: true })
-  avatar: string;
+  avatar?: string;
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)' })
-  createdAt: Date;
+  createdAt?: Date;
 
   @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)', onUpdate: 'CURRENT_TIMESTAMP(6)' })
-  updatedAt: Date;
+  updatedAt?: Date;
 
   @Column('bool', { default: true })
-  active: boolean;
+  active?: boolean;
 }
