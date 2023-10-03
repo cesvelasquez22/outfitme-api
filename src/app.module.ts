@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ProfilesModule } from './profiles/profiles.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guards';
 
@@ -19,6 +20,7 @@ import { JwtAuthGuard } from './auth/guards';
       synchronize: process.env.NODE_ENV !== 'production',
     }),
     AuthModule,
+    ProfilesModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: JwtAuthGuard }],
 })
