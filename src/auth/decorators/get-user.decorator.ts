@@ -1,11 +1,9 @@
 import { createParamDecorator, ExecutionContext, InternalServerErrorException } from '@nestjs/common';
-import { JwtPayload } from '../auth.types';
+import { User } from '../entities/user.entity';
 
 export const GetUser = createParamDecorator((data: string, ctx: ExecutionContext) => {
-  console.log({ data });
-
   const req = ctx.switchToHttp().getRequest();
-  const user: JwtPayload = req.user;
+  const user: User = req.user;
   if (!user) {
     throw new InternalServerErrorException('Request: User not found');
   }

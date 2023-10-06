@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Profile } from 'src/profiles/entities/profile.entity';
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 
 @Entity('users')
 export class User {
@@ -30,4 +31,10 @@ export class User {
 
   @Column('bool', { default: true })
   active?: boolean;
+
+  @OneToMany(() => Profile, (profile) => profile.user, {
+    cascade: true,
+    eager: true,
+  })
+  profiles: Profile[];
 }

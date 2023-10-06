@@ -3,7 +3,6 @@ import { ProfilesService } from './profiles.service';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { GetUser } from 'src/auth/decorators';
-import { User } from 'src/auth/entities/user.entity';
 
 @Controller('profiles')
 export class ProfilesController {
@@ -15,8 +14,8 @@ export class ProfilesController {
   }
 
   @Get()
-  findAll(@GetUser() user: User) {
-    return this.profilesService.findAll();
+  findAll(@GetUser('id') userId: number) {
+    return this.profilesService.findAll(userId);
   }
 
   @Get(':id')
