@@ -8,6 +8,7 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './auth.types';
 import { Profile } from 'src/profiles/entities/profile.entity';
+import { CodeErrors } from 'src/common/errors';
 
 @Injectable()
 export class AuthService {
@@ -41,7 +42,7 @@ export class AuthService {
         token: this.getJwt({ id: userRecord.id }),
       };
     } catch (error) {
-      throw new BadRequestException(error.message);
+      this.handelAuthErrors(error);
     }
   }
 
@@ -71,5 +72,13 @@ export class AuthService {
 
   private getJwt(payload: JwtPayload) {
     return this.jwtService.sign(payload);
+  }
+
+  private handelAuthErrors(error: any) {
+    console.log({ error });
+    if (error.code === CodeErrors.ER_DUP_ENTRY) {
+      throw new BadRequestException('Este correo ya está registrado.');
+    }
+    throw new BadRequestException('Something went wrong');
   }
 }
