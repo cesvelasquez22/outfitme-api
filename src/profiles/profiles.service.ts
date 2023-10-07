@@ -8,24 +8,33 @@ import { Repository } from 'typeorm';
 @Injectable()
 export class ProfilesService {
   constructor(@InjectRepository(Profile) private readonly profileRepository: Repository<Profile>) {}
-  create(createProfileDto: CreateProfileDto) {
-    return 'This action adds a new profile';
+  async create(userId: number, createProfileDto: CreateProfileDto) {
+    const { profileName } = createProfileDto;
+    const profileRecord = this.profileRepository.create({ profileName, user: { id: userId } });
+    await this.profileRepository.save(profileRecord);
+    return { id: profileRecord.id, profileName: profileRecord.profileName };
   }
 
-  findAll(id: number) {
-    const profiles = this.profileRepository.find({ where: { user: { id } } });
+  findAll(userId: number) {
+    const profiles = this.profileRepository.find({ where: { user: { id: userId } } });
     return profiles;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} profile`;
+  async findOne(id: number) {
+    const profile = await this.profileRepository.findOneBy({ id });
+    return profile;
   }
 
-  update(id: number, updateProfileDto: UpdateProfileDto) {
-    return `This action updates a #${id} profile`;
+  async update(id: number, updateProfileDto: UpdateProfileDto) {
+    const { profileName } = updateProfileDto;
+    const profileRecord = await this.findOne(id);
+    profileRecord.profileName = profileName;
+    await this.profileRepository.save(profileRecord);
+    return { id: profileRecord.id, profileName: profileRecord.profileName };
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} profile`;
+  async remove(id: number) {
+    const profile = await this.findOne(id);
+    this.profileRepository.remove(profile);
   }
 }

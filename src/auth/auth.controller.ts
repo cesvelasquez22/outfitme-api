@@ -15,8 +15,8 @@ export class AuthController {
   }
 
   @Public()
-  @HttpCode(HttpStatus.OK)
   @Post('login')
+  @HttpCode(HttpStatus.OK)
   loginUser(@Body() credentials: CredentialsDto) {
     return this.authService.login(credentials);
   }

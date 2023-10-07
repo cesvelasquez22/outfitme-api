@@ -14,6 +14,7 @@ export class Profile {
 
   @ManyToOne(() => User, (user) => user.profiles, {
     onDelete: 'CASCADE',
+    nullable: false,
   })
   user: User;
 }
