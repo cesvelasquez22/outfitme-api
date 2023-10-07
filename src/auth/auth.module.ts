@@ -7,6 +7,7 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ProfilesModule } from 'src/profiles/profiles.module';
 
 @Module({
   controllers: [AuthController],
@@ -28,6 +29,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         };
       },
     }),
+
+    ProfilesModule,
   ],
   exports: [TypeOrmModule, JwtStrategy, PassportModule, JwtModule],
 })
