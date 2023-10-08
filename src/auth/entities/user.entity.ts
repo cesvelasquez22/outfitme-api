@@ -18,14 +18,13 @@ export class User {
   @Column('text', { nullable: true })
   avatar?: string;
 
-  @CreateDateColumn({ type: 'timestamp', select: false, default: () => 'CURRENT_TIMESTAMP(6)' })
+  @CreateDateColumn({ type: 'timestamp', select: false, default: () => 'NOW()' })
   createdAt?: Date;
 
   @UpdateDateColumn({
     type: 'timestamp',
     select: false,
-    default: () => 'CURRENT_TIMESTAMP(6)',
-    onUpdate: 'CURRENT_TIMESTAMP(6)',
+    default: () => 'NOW()',
   })
   updatedAt?: Date;
 

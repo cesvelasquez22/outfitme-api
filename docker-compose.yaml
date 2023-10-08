@@ -1,28 +1,22 @@
-version: '3.8'
+version: '3'
+
 services:
   db:
-    image: mysql:8.0
+    image: postgres:14.3
     restart: always
-    environment:
-      MYSQL_DATABASE: '${DB_NAME}'
-      # So you don't have to use root, but you can if you like
-      MYSQL_USER: '${DB_USER}'
-      # You can use whatever password you like
-      MYSQL_PASSWORD: '${DB_PASSWORD}'
-      # Password for root access
-      MYSQL_ROOT_PASSWORD: '${DB_ROOT_PASSWORD}'
-      # Set timezone
-      TZ: 'America/Chicago'
-    command: '--default-time-zone=-06:00'
     ports:
-      # <Port exposed> : <MySQL Port running inside container>
-      - '${DB_PORT}:${DB_PORT_CONTAINER}'
+      - "${DB_PORT_EXPOSED}:${DB_PORT}"
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+      TZ: 'America/Chicago'
+    # Set default time zone for the database
+    command: postgres -c 'timezone=-06:00'
     expose:
       # Opens port on the container
       - '${DB_PORT_CONTAINER}'
       # Where our data will be persisted
+    container_name: outfitme_db
     volumes:
-      - outfitme-db:/var/lib/mysql
-# Names our volume
-volumes:
-  outfitme-db:
+      - ./postgres:/var/lib/postgresql/data
