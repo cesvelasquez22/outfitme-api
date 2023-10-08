@@ -11,12 +11,15 @@ services:
       MYSQL_PASSWORD: '${DB_PASSWORD}'
       # Password for root access
       MYSQL_ROOT_PASSWORD: '${DB_ROOT_PASSWORD}'
+      # Set timezone
+      TZ: 'America/Chicago'
+    command: '--default-time-zone=-06:00'
     ports:
       # <Port exposed> : <MySQL Port running inside container>
-      - '3306:3306'
+      - '${DB_PORT_EXPOSED}:${DB_PORT}'
     expose:
-      # Opens port 3306 on the container
-      - '3306'
+      # Opens port on the container
+      - '${DB_PORT}'
       # Where our data will be persisted
     volumes:
       - outfitme-db:/var/lib/mysql
