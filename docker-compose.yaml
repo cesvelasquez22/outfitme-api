@@ -2,10 +2,10 @@ version: '3'
 
 services:
   db:
-    image: postgres:14.3
+    image: postgres:15.4
     restart: always
     ports:
-      - "${DB_PORT_EXPOSED}:${DB_PORT}"
+      - "${DB_PORT}:${DB_PORT_CONTAINER}"
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
@@ -20,3 +20,6 @@ services:
     container_name: outfitme_db
     volumes:
       - ./postgres:/var/lib/postgresql/data
+# Names our volume
+volumes:
+  outfitme-db:

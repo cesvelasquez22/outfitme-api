@@ -18,7 +18,7 @@ import configuration from './config/configuration';
       useFactory: async (config: ConfigService) => {
         const isProduction = config.get<boolean>('production');
         return {
-          type: 'mysql',
+          type: 'postgres',
           ssl: isProduction,
           extra: {
             ssl: isProduction ? { rejectUnauthorized: false } : null,
