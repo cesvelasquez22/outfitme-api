@@ -17,18 +17,14 @@ import configuration from './config/configuration';
       imports: [ConfigModule],
       useFactory: async (config: ConfigService) => {
         const isProduction = config.get<boolean>('production');
+        const productionStage = config.get<string>('stage') === 'production';
         return {
-          type: 'mysql',
-          ssl: isProduction,
+          type: 'postgres',
+          ssl: productionStage,
           extra: {
-            ssl: isProduction ? { rejectUnauthorized: false } : null,
+            ssl: productionStage ? { rejectUnauthorized: false } : null,
           },
           url: config.get<string>('database.url'),
-          host: config.get<string>('database.host'),
-          port: config.get<number>('database.port'),
-          username: config.get<string>('database.username'),
-          password: config.get<string>('database.password'),
-          database: config.get<string>('database.database'),
           entities: [__dirname + '/**/*.entity{.ts,.js}'],
           synchronize: !isProduction,
         };
